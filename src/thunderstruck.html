@@ -1,0 +1,217 @@
+<html>
+    <head>
+		<title>Remote Thunderstruck</title>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<style>
+			.user {
+				
+			}
+			
+			.user.active {
+				color:red;
+			}
+			
+			.title {
+			
+			}
+		</style>
+	</head>
+	<body>
+		<h1 class="title">Remote Thunderstruck</h1>
+		<audio id="audio-player">
+		  <source src="assets/audio/thunderstruck.mp3" type="audio/mpeg">
+		  Your browser does not support the audio element.
+		</audio>
+		<div id="div-setup-container">
+			<button id="start-button">Start</button>
+			<input type="checkbox" id="show-timer">
+			<label for="show-timer">Show Timer</label>
+			<div id="div-users-setup">
+				<button id="user-add"> + </button>
+			</div>
+		</div>
+		<div id="div-thunderstuck">
+			<button id="stop-button">Stop</button>
+			<div id="div-user-list">
+			
+			</div>
+			<h1 id="current-user"></h1>
+			<br />
+			<div id="timer">00:00</div>
+		</div>
+		
+		<script type="text/javascript">
+
+			var users = [];
+			var thunderTimes = [
+				2000,3000,4000,7000,8000, //testing only
+				30000,33430,37050,40680,44260,
+				47890,51470,55130,58670,62250,
+				71380,78520,85720,92970,111000
+			]; //first is first thunder, last is end of song.
+			var currentThunderTimeStart;
+			var currentThunderCount = 0;
+			var thunderTimeStart = new Date;
+			var thunderTimeNext = new Date;
+			var audioPlayer;
+
+			$(function () {
+				audioPlayer = document.getElementById("audio-player"); 
+				$('#start-button').click(startThunderstruck);
+				$('#stop-button').click(stopThunderstruck);
+				$('#user-add').click(userAdd);
+				audioLoad();
+				userAdd();
+				showUserSetupDiv();
+				showSetupContainer();
+				hideThunderstruckDiv();
+			});
+
+			function startThunderstruck() {
+				//save current time
+				loadUsers();
+				hideSetupContainer();
+				showThunderstruckDiv();
+				currentThunderCount = 0;
+				thunderTimeStart = new Date;
+				thunderTimeNext = thunderTimeStart;
+				hideUserSetupDiv();
+				audioPlay();
+				timerTick();
+				intervalRefresh = setInterval(timerTick, 10);
+				if ( $('#show-timer').is(":checked") ) {
+					showTimerDiv();
+				} else {
+					hideTimerDiv();
+				}
+			}
+
+			function timerTick() {
+				var timeNow = new Date;
+				var currentUserIdx = (currentThunderCount - 1)% users.length;
+				if (timeNow > thunderTimeNext) {
+					thunderTimeNext = new Date(thunderTimeStart.getTime() + thunderTimes[currentThunderCount]);
+
+					if (currentThunderCount - 1 >= 0) {
+						$('#current-user').text(users[currentUserIdx]);
+						$('.user').removeClass('active');
+						var $usersDivList = $('#div-user-list').find('.user');
+						$($usersDivList[currentUserIdx]).addClass('active');
+					} else {
+						$('#current-user').text('Wait for it...');
+					}
+
+					currentThunderCount++;
+				}
+
+				if (currentThunderCount >= thunderTimes.length) {
+					stopThunderstruck();
+				}
+				
+				var intMilisecondsTotal = Math.round((thunderTimeNext - timeNow));
+				$('#timer').text(getFriendlyTimeString(intMilisecondsTotal));
+			};
+
+			function stopThunderstruck() {
+				clearInterval(intervalRefresh);
+				$('#current-user').text('');
+				audioLoad();
+				showUserSetupDiv();
+				hideThunderstruckDiv();
+				showSetupContainer();
+			}
+			
+			function loadUsers() { 
+				users = [];
+				$('#div-user-list').empty();
+				var $usersDivList = $('#div-users-setup').find('.user-name');
+				$.each($usersDivList, function( i, element ) {
+					var userName = $(element).val();
+					users.push(userName);
+					$('#div-user-list').append('<div class="user">' + userName + '</div>');
+				});
+			}
+			
+			function userAdd() {
+				//sorry for the mess here, only using notepad++... and the syntax highlighter doesn't love line breaks
+				var htmlInput = '<div class="user-input-container" ><input type="text" class="user-name"/><button class="user-remove"> - </button><br /></div>'
+				$('#user-add').before(htmlInput);
+				
+				var $userRemoveBtn = $('#user-add').prev().find('.user-remove');
+				$userRemoveBtn.click(userRemove);
+			}
+			
+			function userRemove() {
+				$(this).parent().remove();
+			}
+			
+			function audioPlay() { 
+			  audioPlayer.play(); 
+			} 
+			
+			function audioLoad() { 
+			  audioPlayer.load(); 
+			}
+			
+			function showSetupContainer() { 
+			  $('#div-setup-container').show();
+			}
+			
+			function hideSetupContainer() {
+			  $('#div-setup-container').hide();
+			}
+			
+			function showUserSetupDiv() { 
+			  $('#div-users-setup').show();
+			}
+			
+			function hideUserSetupDiv() {
+			  $('#div-users-setup').hide();
+			}
+			
+			function showTimerDiv() { 
+			  $('#timer').show();
+			}
+			
+			function hideTimerDiv() {
+			  $('#timer').hide();
+			}
+			
+			function showThunderstruckDiv() { 
+			  $('#div-thunderstuck').show();
+			}
+			
+			function hideThunderstruckDiv() {
+			  $('#div-thunderstuck').hide();
+			}
+			
+			/*
+			Gets a friendly time string based on the passed in number of total seconds.
+			in the format: "hh:mm:ss"
+			*/
+			function getFriendlyTimeString(intMilisecondsTotal) {
+
+				if (isNaN(intMilisecondsTotal)) {
+					return "00:00";
+				}
+
+				var intDisplaySeconds = Math.floor(intMilisecondsTotal / 1000) % 60;
+				var intDisplayMiliseconds = intMilisecondsTotal % 1000;
+
+				return pad2(intDisplaySeconds) + '.' + pad3(intDisplayMiliseconds);
+			}
+			
+			function pad2(number) {
+			   return (number < 10 ? '0' : '') + number
+			}
+			
+			function pad3(number) {
+			   return (number < 10 ? '0' : '') + (number < 10 ? '0' : '') + number
+			}
+			
+			function pad4(number) {
+			   return (number < 1000 ? '0' : '') + (number < 100 ? '0' : '') + (number < 10 ? '0' : '') + number
+			}
+		</script>
+    </body>
+</html>
