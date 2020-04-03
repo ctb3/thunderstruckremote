@@ -1,45 +1,41 @@
 <html>
-    <head>
+  <head>
 		<title>Remote Thunderstruck</title>
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
-		<style>
-			.user {
-				
-			}
-			
-			.user.active {
-				color:red;
-			}
-			
-			.title {
-			
-			}
-		</style>
+    <link rel="stylesheet" type="text/css" href="assets/static/thunderstyle.css">
 	</head>
 	<body>
-		<h1 class="title">Remote Thunderstruck</h1>
-		<audio id="audio-player">
-		  <source src="assets/audio/thunderstruck.mp3" type="audio/mpeg">
-		  Your browser does not support the audio element.
-		</audio>
-		<div id="div-setup-container">
-			<button id="start-button">Start</button>
-			<input type="checkbox" id="show-timer">
-			<label for="show-timer">Show Timer</label>
-			<div id="div-users-setup">
-				<button id="user-add"> + </button>
-			</div>
-		</div>
-		<div id="div-thunderstuck">
-			<button id="stop-button">Stop</button>
-			<div id="div-user-list">
-			
-			</div>
-			<h1 id="current-user"></h1>
-			<br />
-			<div id="timer">00:00</div>
-		</div>
-		
+    <div class="main">
+  		<h1 class="title">Let's Play Remote Thunderstruck</h1>
+  		<audio id="audio-player">
+  		  <source src="assets/audio/thunderstruck.mp3" type="audio/mpeg">
+  		  Your browser does not support the audio element.
+  		</audio>
+  		<div id="div-setup-container">
+  			<div id="div-users-setup">
+          <h2>Add The Alcoholics</h2>
+          <div id="user-add-container">
+            <span class="add-another">Add Another</span>
+  				  <button id="user-add"> + </button>
+          </div>
+          <h2>Display Remaining Chug Time</h2>
+          <div class="timer">
+            <input type="checkbox" id="show-timer">
+      			<label class="show-timer" for="show-timer">Show Timer</label>
+          </div>
+  			</div>
+        <button id="start-button">Let's Drink!</button>
+  		</div>
+  		<div id="div-thunderstuck">
+  			<div id="div-user-list">
+
+  			</div>
+        <button id="stop-button">Restart</button>
+  			<h1 id="current-user"></h1>
+  			<div id="timer">00:00</div>
+  		</div>
+    </div>
+
 		<script type="text/javascript">
 
 			var users = [];
@@ -56,7 +52,7 @@
 			var audioPlayer;
 
 			$(function () {
-				audioPlayer = document.getElementById("audio-player"); 
+				audioPlayer = document.getElementById("audio-player");
 				$('#start-button').click(startThunderstruck);
 				$('#stop-button').click(stopThunderstruck);
 				$('#user-add').click(userAdd);
@@ -107,7 +103,7 @@
 				if (currentThunderCount >= thunderTimes.length) {
 					stopThunderstruck();
 				}
-				
+
 				var intMilisecondsTotal = Math.round((thunderTimeNext - timeNow));
 				$('#timer').text(getFriendlyTimeString(intMilisecondsTotal));
 			};
@@ -120,8 +116,8 @@
 				hideThunderstruckDiv();
 				showSetupContainer();
 			}
-			
-			function loadUsers() { 
+
+			function loadUsers() {
 				users = [];
 				$('#div-user-list').empty();
 				var $usersDivList = $('#div-users-setup').find('.user-name');
@@ -131,60 +127,60 @@
 					$('#div-user-list').append('<div class="user">' + userName + '</div>');
 				});
 			}
-			
+
 			function userAdd() {
 				//sorry for the mess here, only using notepad++... and the syntax highlighter doesn't love line breaks
-				var htmlInput = '<div class="user-input-container" ><input type="text" class="user-name"/><button class="user-remove"> - </button><br /></div>'
-				$('#user-add').before(htmlInput);
-				
-				var $userRemoveBtn = $('#user-add').prev().find('.user-remove');
+				var htmlInput = '<div class="user-input-container" ><input type="text" class="user-name" placeholder="Enter name..."/><button class="user-remove"> - </button><br /></div>'
+				$('#user-add-container').before(htmlInput);
+
+				var $userRemoveBtn = $('#user-add-container').prev().find('.user-remove');
 				$userRemoveBtn.click(userRemove);
 			}
-			
+
 			function userRemove() {
 				$(this).parent().remove();
 			}
-			
-			function audioPlay() { 
-			  audioPlayer.play(); 
-			} 
-			
-			function audioLoad() { 
-			  audioPlayer.load(); 
+
+			function audioPlay() {
+			  audioPlayer.play();
 			}
-			
-			function showSetupContainer() { 
+
+			function audioLoad() {
+			  audioPlayer.load();
+			}
+
+			function showSetupContainer() {
 			  $('#div-setup-container').show();
 			}
-			
+
 			function hideSetupContainer() {
 			  $('#div-setup-container').hide();
 			}
-			
-			function showUserSetupDiv() { 
+
+			function showUserSetupDiv() {
 			  $('#div-users-setup').show();
 			}
-			
+
 			function hideUserSetupDiv() {
 			  $('#div-users-setup').hide();
 			}
-			
-			function showTimerDiv() { 
+
+			function showTimerDiv() {
 			  $('#timer').show();
 			}
-			
+
 			function hideTimerDiv() {
 			  $('#timer').hide();
 			}
-			
-			function showThunderstruckDiv() { 
+
+			function showThunderstruckDiv() {
 			  $('#div-thunderstuck').show();
 			}
-			
+
 			function hideThunderstruckDiv() {
 			  $('#div-thunderstuck').hide();
 			}
-			
+
 			/*
 			Gets a friendly time string based on the passed in number of total seconds.
 			in the format: "hh:mm:ss"
@@ -200,18 +196,18 @@
 
 				return pad2(intDisplaySeconds) + '.' + pad3(intDisplayMiliseconds);
 			}
-			
+
 			function pad2(number) {
 			   return (number < 10 ? '0' : '') + number
 			}
-			
+
 			function pad3(number) {
 			   return (number < 10 ? '0' : '') + (number < 10 ? '0' : '') + number
 			}
-			
+
 			function pad4(number) {
 			   return (number < 1000 ? '0' : '') + (number < 100 ? '0' : '') + (number < 10 ? '0' : '') + number
 			}
 		</script>
-    </body>
+  </body>
 </html>
