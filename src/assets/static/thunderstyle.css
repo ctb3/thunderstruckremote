@@ -1,0 +1,138 @@
+@font-face {
+  font-family: 'senregular';
+  src: url('sen-regular-webfont.woff2') format('woff2'),
+       url('sen-regular-webfont.woff') format('woff');
+}
+
+body {
+  font-family: 'senregular';
+  color: #1D1A31;
+}
+
+h1, h2 {
+  letter-spacing: 0.05em;
+  opacity: .65;
+}
+
+h1 {
+  text-transform: uppercase;
+  font-size: 1.2em;
+}
+
+h2 {
+  font-size: 1em;
+}
+
+button {
+  font-family: inherit;
+  border-radius: 5px;
+  font-size: 100%;
+  cursor: pointer;
+  border: none;
+}
+
+.main {
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5rem;
+  display: flex;
+}
+
+#div-users-setup, #div-user-list {
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  padding: 2rem 3rem 3rem 3rem;
+  justify-content: center;
+  flex-direction: column;
+  align-items: baseline;
+  border-radius: 5px;
+  display: flex;
+  width: 300px;
+}
+
+.user-input-container, #user-add-container {
+  margin-bottom: 1rem;
+  display: flex;
+  width: 100%;
+}
+
+#user-add-container {
+  align-items: center;
+}
+
+.user-name, .add-another {
+  width: 85%;
+}
+
+.user-remove, #user-add {
+  width: 15%;
+}
+
+.user-name {
+  border-color: #E2E9EE;
+  border-style: solid;
+  border-radius: 5px;
+  border-width: 1px;
+  padding: 10px;
+}
+
+.user-remove {
+  background-color: #E2E9EE;
+  margin-left: 0.5rem;
+  transition: 0.5s;
+}
+
+.user-remove:hover {
+  background-color: #D7E0E7;
+}
+
+.add-another {
+  font-style: italic;
+  font-size: .85rem;
+  color: #AEAEAE;
+}
+
+#user-add {
+  background-color: #BCF9C9;
+  transition: 0.5s;
+  height: 35px;
+  border: none;
+}
+
+#user-add:hover {
+  background-color: #9ACCA5;
+}
+
+#start-button, #stop-button {
+  border-radius: 30px;
+  padding: 10px 30px;
+  margin-top: 1rem;
+  float: right;
+}
+
+#start-button {
+  background: #20A4F3;
+  transition: 0.5s;
+  color: white;
+}
+
+#start-button:hover {
+  background: #1B87C7;
+  font-size: 105%;
+}
+
+.show-timer {
+  font-size: .85rem;
+  opacity: .65;
+}
+
+#div-user-list {
+  align-items: center;
+}
+
+.user {
+  margin-bottom: 1rem;
+}
+
+.user.active {
+  color: red;
+}
