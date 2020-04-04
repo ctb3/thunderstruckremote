@@ -61,6 +61,7 @@
 				showUserSetupDiv();
 				showSetupContainer();
 				hideThunderstruckDiv();
+				tryEnableStartButton();
 			});
 
 			function startThunderstruck() {
@@ -132,11 +133,13 @@
 				//sorry for the mess here, only using notepad++... and the syntax highlighter doesn't love line breaks
 				var htmlInput = '<div class="user-input-container" ><input type="text" class="user-name" placeholder="Enter name..."/><button class="user-remove"> - </button><br /></div>'
 				$('#user-add-container').before(htmlInput);
-
+				var $inputField = $('#user-add-container').prev().find('input');
+				$inputField.keyup(tryEnableStartButton);
 				var $userRemoveBtn = $('#user-add-container').prev().find('.user-remove');
 				$userRemoveBtn.click(userRemove);
+				tryEnableStartButton();
 			}
-
+			
 			function userRemove() {
 				$(this).parent().remove();
 			}
@@ -148,8 +151,39 @@
 			function audioLoad() {
 			  audioPlayer.load();
 			}
-
-			function showSetupContainer() {
+			
+			/*
+				checks all user input fields and ensures none of them are 
+				empty string or whitespace before enabling the start button
+			*/
+			function tryEnableStartButton() {
+				var shouldEnable = true;
+				
+				var $usersDivList = $('#div-users-setup').find('.user-name');
+				$.each($usersDivList, function( i, element ) {
+					var userName = $(element).val();
+					if (userName.trim() == "" ) {
+						shouldEnable = false;
+						return false;
+					}
+				});
+				
+				if(shouldEnable) {
+					enableStartButton();
+				} else {
+					disableStartButton();
+				}
+			}
+			
+			function enableStartButton() { 
+			  $('#start-button').prop("disabled",false);
+			}
+			
+			function disableStartButton() { 
+			  $('#start-button').prop("disabled",true);
+			}
+			
+			function showSetupContainer() { 
 			  $('#div-setup-container').show();
 			}
 
