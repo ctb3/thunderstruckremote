@@ -104,18 +104,15 @@ button {
 
 #start-button, #stop-button {
   border-radius: 30px;
+  background: #20A4F3;
   padding: 10px 30px;
   margin-top: 1rem;
+  transition: 0.5s;
+  color: white;
   float: right;
 }
 
-#start-button {
-  background: #20A4F3;
-  transition: 0.5s;
-  color: white;
-}
-
-#start-button:hover {
+#start-button:hover, #stop-button:hover {
   background: #1B87C7;
   font-size: 105%;
 }
