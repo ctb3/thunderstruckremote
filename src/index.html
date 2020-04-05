@@ -39,7 +39,7 @@
 		<script type="text/javascript">
 			var textFinish = "Fin!"; //This is the text that displays at the end of the song
 			var textStart = "Wait for it..." //Text that displays before the first thunder
-			var users = [];
+			var users = []; //array of user names
 			var thunderTimes = [
 				//2000,3000,4000,7000,8000 //testing only
 				29710,
@@ -117,7 +117,7 @@
 				showThunderstruckDiv();
 				audioPlay();
 				timerTick();
-				intervalRefresh = setInterval(timerTick, 10);
+				intervalRefresh = setInterval(timerTick, 25);
 				if ( $('#show-timer').is(":checked") ) {
 					showTimerDiv();
 				} else {
@@ -284,7 +284,7 @@
 
 			/*
 			Gets a friendly time string based on the passed in number of total seconds.
-			in the format: "hh:mm:ss"
+			in the format: "ss.xxx" x=milliseconds
 			*/
 			function getFriendlyTimeString(intMilisecondsTotal) {
 
@@ -303,7 +303,7 @@
 			}
 
 			function pad3(number) {
-			   return (number < 10 ? '0' : '') + (number < 10 ? '0' : '') + number
+			   return (number < 100 ? '0' : '') + (number < 10 ? '0' : '') + number
 			}
 
 			function pad4(number) {
