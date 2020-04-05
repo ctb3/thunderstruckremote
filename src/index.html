@@ -37,12 +37,12 @@
     </div>
 
 		<script type="text/javascript">
-			var finishCount = 35; //This is the thundercount the song finishes on
+			var finishCount = 3; //This is the thundercount the song finishes on
 			var textFinish = "Fin!"; //This is the text that displays at the end of the song
 			var textStart = "Wait for it..." //Text that displays before the first thunder
 			var users = [];
 			var thunderTimes = [
-				//2000,3000,4000,7000,8000, //testing only
+				2000,3000,4000,7000,8000, //testing only
 				29710,
 				33360,
 				37000,
@@ -94,7 +94,6 @@
 				$('#user-add').click(userAdd);
 				audioLoad();
 				userAdd();
-				showUserSetupDiv();
 				showSetupContainer();
 				hideThunderstruckDiv();
 				tryEnableStartButton();
@@ -102,13 +101,12 @@
 
 			function startThunderstruck() {
 				//save current time
-				loadUsers();
-				hideSetupContainer();
-				showThunderstruckDiv();
 				currentThunderCount = 0;
 				thunderTimeStart = new Date;
 				thunderTimeNext = thunderTimeStart;
-				hideUserSetupDiv();
+				loadUsers();
+				hideSetupContainer();
+				showThunderstruckDiv();
 				audioPlay();
 				timerTick();
 				intervalRefresh = setInterval(timerTick, 10);
@@ -160,7 +158,6 @@
 				clearInterval(intervalRefresh);
 				$('#current-user').text('');
 				audioLoad();
-				showUserSetupDiv();
 				hideThunderstruckDiv();
 				showSetupContainer();
 			}
@@ -239,14 +236,6 @@
 
 			function hideSetupContainer() {
 			  $('#div-setup-container').hide();
-			}
-
-			function showUserSetupDiv() {
-			  $('#div-users-setup').show();
-			}
-
-			function hideUserSetupDiv() {
-			  $('#div-users-setup').hide();
 			}
 
 			function showTimerDiv() {
