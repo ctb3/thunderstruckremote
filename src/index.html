@@ -37,15 +37,50 @@
     </div>
 
 		<script type="text/javascript">
-
+			var finishCount = 35; //This is the thundercount the song finishes on
+			var textFinish = "Fin!"; //This is the text that displays at the end of the song
+			var textStart = "Wait for it..." //Text that displays before the first thunder
 			var users = [];
 			var thunderTimes = [
 				//2000,3000,4000,7000,8000, //testing only
-				30000,33430,37050,40680,44260,
-				47890,51470,55130,58670,62250,
-				71380,78520,85720,92970,111000,
-				99999999999999 //testing only
-			]; //first is first thunder, last is end of song.
+				29710,
+				33360,
+				37000,
+				40560,
+				44170,
+				47750,
+				51420,
+				54980,
+				58530,
+				62170,
+				71180,
+				78360,
+				85520,
+				92720,
+				100840,
+				111750,
+				162500,
+				166300,
+				169750,
+				173310,
+				223330,
+				227040,
+				230540,
+				234140,
+				251620,
+				255260,
+				258000,
+				259230,
+				262570,
+				266000,
+				269700,
+				273170,
+				276500,
+				279610,
+				290000, //song ends
+				295000 //time to auto reset
+				//1, 9999999,1 //testing only
+			]; //first is first thunder. second to last is end of song. last is auto reset.
 			var currentThunderTimeStart;
 			var currentThunderCount = 0;
 			var thunderTimeStart = new Date;
@@ -86,29 +121,40 @@
 
 			function timerTick() {
 				var timeNow = new Date;
-				var currentUserIdx = (currentThunderCount - 1)% users.length;
-				if (timeNow > thunderTimeNext) {
-					thunderTimeNext = new Date(thunderTimeStart.getTime() + thunderTimes[currentThunderCount]);
-
-					if (currentThunderCount - 1 >= 0) {
-						$('#current-user').text(users[currentUserIdx]);
-						$('.user').removeClass('active');
-						var $usersDivList = $('#div-user-list').find('.user');
-						$($usersDivList[currentUserIdx]).addClass('active');
-					} else {
-						$('#current-user').text('Wait for it...');
-					}
-
-					currentThunderCount++;
-				}
-
-				if (currentThunderCount >= thunderTimes.length) {
-					stopThunderstruck();
-				}
-
+								
 				var intMilisecondsTotal = Math.round((thunderTimeNext - timeNow));
 				$('#timer').text(getFriendlyTimeString(intMilisecondsTotal));
+				
+				if (timeNow > thunderTimeNext) {
+					nextUser();
+				}
+
 			};
+			
+			function nextUser() {
+				var currentUserIdx = (currentThunderCount - 1)% users.length;
+					
+				thunderTimeNext = new Date(thunderTimeStart.getTime() + thunderTimes[currentThunderCount]);
+
+				if (currentThunderCount <= 0) {
+					$('#current-user').text(textStart);
+					
+				} else if (currentThunderCount == finishCount) {
+					hideTimerDiv();
+					$('#current-user').text(textFinish);
+					
+				} else if (currentThunderCount > finishCount) {
+					stopThunderstruck();
+					
+				} else {
+					$('#current-user').text(users[currentUserIdx]);
+					$('.user').removeClass('active');
+					var $usersDivList = $('#div-user-list').find('.user');
+					$($usersDivList[currentUserIdx]).addClass('active');
+				}
+				
+				currentThunderCount++;
+			}
 
 			function stopThunderstruck() {
 				clearInterval(intervalRefresh);
@@ -134,10 +180,13 @@
 				//sorry for the mess here, only using notepad++... and the syntax highlighter doesn't love line breaks
 				var htmlInput = '<div class="user-input-container" ><input type="text" class="user-name" placeholder="Enter name..."/><button class="user-remove"> - </button><br /></div>'
 				$('#user-add-container').before(htmlInput);
+				
 				var $inputField = $('#user-add-container').prev().find('input');
 				$inputField.keyup(tryEnableStartButton);
+				
 				var $userRemoveBtn = $('#user-add-container').prev().find('.user-remove');
 				$userRemoveBtn.click(userRemove);
+				
 				tryEnableStartButton();
 			}
 			
@@ -154,8 +203,8 @@
 			}
 			
 			/*
-				checks all user input fields and ensures none of them are 
-				empty string or whitespace before enabling the start button
+			checks all user input fields and ensures none of them are 
+			empty string or whitespace before enabling the start button
 			*/
 			function tryEnableStartButton() {
 				var shouldEnable = true;
