@@ -37,12 +37,11 @@
     </div>
 
 		<script type="text/javascript">
-			var finishCount = 3; //This is the thundercount the song finishes on
 			var textFinish = "Fin!"; //This is the text that displays at the end of the song
 			var textStart = "Wait for it..." //Text that displays before the first thunder
 			var users = [];
 			var thunderTimes = [
-				2000,3000,4000,7000,8000, //testing only
+				//2000,3000,4000,7000,8000 //testing only
 				29710,
 				33360,
 				37000,
@@ -81,13 +80,19 @@
 				295000 //time to auto reset
 				//1, 9999999,1 //testing only
 			]; //first is first thunder. second to last is end of song. last is auto reset.
-			var currentThunderTimeStart;
 			var currentThunderCount = 0;
-			var thunderTimeStart = new Date;
-			var thunderTimeNext = new Date;
+			var thunderTimeStart = new Date; //keep track of when the game was started
+			var thunderTimeNext = new Date; //keep track of when the next thunder will be
 			var audioPlayer;
 
 			$(function () {
+				initThunderstruck();
+			});
+			
+			/*
+			initalize everything, get ready for user input to start the game
+			*/
+			function initThunderstruck() {
 				audioPlayer = document.getElementById("audio-player");
 				$('#start-button').click(startThunderstruck);
 				$('#stop-button').click(stopThunderstruck);
@@ -96,9 +101,12 @@
 				userAdd();
 				showSetupContainer();
 				hideThunderstruckDiv();
-				tryEnableStartButton();
-			});
-
+				tryEnableStartButton();				
+			}
+			
+			/*
+			hide the setup div, show everything needed, start the timer and the game
+			*/
 			function startThunderstruck() {
 				//save current time
 				currentThunderCount = 0;
@@ -116,7 +124,11 @@
 					hideTimerDiv();
 				}
 			}
-
+			
+			/*
+			every tick of the interval checker, update the timer, decide if we should
+			switch to next user
+			*/
 			function timerTick() {
 				var timeNow = new Date;
 								
@@ -129,22 +141,29 @@
 
 			};
 			
+			/*
+			switch to next user, update all state variables. checks to see if it should stop/ display start message or ending message
+			*/
 			function nextUser() {
 				var currentUserIdx = (currentThunderCount - 1)% users.length;
 					
 				thunderTimeNext = new Date(thunderTimeStart.getTime() + thunderTimes[currentThunderCount]);
 
 				if (currentThunderCount <= 0) {
+					//no one has gone yet, we're just starting
 					$('#current-user').text(textStart);
 					
-				} else if (currentThunderCount == finishCount) {
+				} else if (currentThunderCount == thunderTimes.length -1) {
+					//song just ended, show final message
 					hideTimerDiv();
 					$('#current-user').text(textFinish);
 					
-				} else if (currentThunderCount > finishCount) {
+				} else if (currentThunderCount > thunderTimes.length -1) {
+					//song is ended and we're past the final message, go to beginning
 					stopThunderstruck();
 					
 				} else {
+					//not a starting / ending condition, switch to next user
 					$('#current-user').text(users[currentUserIdx]);
 					$('.user').removeClass('active');
 					var $usersDivList = $('#div-user-list').find('.user');
@@ -153,7 +172,10 @@
 				
 				currentThunderCount++;
 			}
-
+			
+			/*
+			clear everything and set everything up to be ready for the next game
+			*/
 			function stopThunderstruck() {
 				clearInterval(intervalRefresh);
 				$('#current-user').text('');
@@ -161,7 +183,10 @@
 				hideThunderstruckDiv();
 				showSetupContainer();
 			}
-
+			
+			/*
+			take all of the users entered in the input fields and builds them int the user list for the game
+			*/
 			function loadUsers() {
 				users = [];
 				$('#div-user-list').empty();
@@ -173,6 +198,9 @@
 				});
 			}
 
+			/*
+			Add new input box for adding a new user.
+			*/
 			function userAdd() {
 				//sorry for the mess here, only using notepad++... and the syntax highlighter doesn't love line breaks
 				var htmlInput = '<div class="user-input-container" ><input type="text" class="user-name" placeholder="Enter name..."/><button class="user-remove"> - </button><br /></div>'
