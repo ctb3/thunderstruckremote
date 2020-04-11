@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 270">
+  <defs>
+    <style>.cls-1{fill:#f1f2f2;
+      opacity: .5;}
+      .cls-2{fill:#f1f2f2;
+      opacity: .5;}
+      .cls-middle{fill:#f1f2f2;
+      opacity: .5;}
+.bg{fill:#ffffff;
+opacity: .0;}
+      .cls-1 {
+      animation: action2 4s infinite alternate;
+      }
+
+      .cls-2 {
+      animation: action1 4s infinite alternate;
+      }
+
+      .cls-middle {
+      animation: action1 4s infinite alternate;
+      }
+
+      @keyframes action1 {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-50px); }
+      }
+
+      @keyframes action2 {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(25px); }
+      }
+    </style>
+</defs><title>clouds</title><rect class="bg" width="1400" height="270"/>
+<path class="cls-1" d="M326,144.94h-2.51a65.94,65.94,0,0,0-131.88,0h-3v0a33.13,33.13,0,0,0,0,66.26v0H326a33.15,33.15,0,1,0,0-66.3Z"/>
+<path class="cls-1" d="M1211,144.94h-2.51a65.94,65.94,0,0,0-131.88,0h-3v0a33.13,33.13,0,0,0,0,66.26v0H1211a33.15,33.15,0,1,0,0-66.3Z"/>
+<path class="cls-middle" d="M768.45,124.36h-2.51a65.94,65.94,0,0,0-131.88,0h-3v0a33.13,33.13,0,0,0,0,66.26v0H768.45a33.15,33.15,0,1,0,0-66.3Z"/>
+<path class="cls-2" d="M1375.36,147.12h-1.42a37.44,37.44,0,0,0-74.88,0h-1.7v0a18.81,18.81,0,0,0,0,37.61h78a18.82,18.82,0,1,0,0-37.64Z"/>
+<path class="cls-2" d="M102.36,147.12h-1.42a37.44,37.44,0,0,0-74.88,0h-1.7v0a18.81,18.81,0,0,0,0,37.61h78a18.82,18.82,0,1,0,0-37.64Z"/></svg>
