@@ -5,8 +5,12 @@
     <link rel="stylesheet" type="text/css" href="assets/static/thunderstyle.css">
 	</head>
 	<body>
+    <div class="header-bar">
+      <img class="clouds" src="assets/images/Clouds_1.svg">
+  	  <h1 class="title">Let's Play Remote Thunderstruck!</h1>
+      <img class="clouds" src="assets/images/Clouds_1.svg">
+    </div>
     <div class="main">
-  		<h1 class="title">Let's Play Remote Thunderstruck</h1>
   		<audio id="audio-player">
   		  <source src="assets/audio/Thunderstruck.mp3" type="audio/mpeg">
   		  Your browser does not support the audio element.
@@ -24,15 +28,21 @@
       			<label class="show-timer" for="show-timer">Show Timer</label>
           </div>
   			</div>
-        <button id="start-button">Let's Drink!</button>
+        <button id="start-button">Let's Drink!
+          <img class="button-image" src="assets/images/Arrow.svg">
+        </button>
   		</div>
   		<div id="div-thunderstuck">
+        <div class="other-stuff">
+          <h1 id="current-user"></h1>
+          <div id="timer">00:00</div>
+          <button id="stop-button">Restart
+            <img class="button-image" src="assets/images/Restart.svg">
+          </button>
+        </div>
   			<div id="div-user-list">
 
   			</div>
-        <button id="stop-button">Restart</button>
-  			<h1 id="current-user"></h1>
-  			<div id="timer">00:00</div>
   		</div>
     </div>
 
@@ -88,7 +98,7 @@
 			$(function () {
 				initThunderstruck();
 			});
-			
+
 			/*
 			initalize everything, get ready for user input to start the game
 			*/
@@ -101,9 +111,9 @@
 				userAdd();
 				showSetupContainer();
 				hideThunderstruckDiv();
-				tryEnableStartButton();				
+				tryEnableStartButton();
 			}
-			
+
 			/*
 			hide the setup div, show everything needed, start the timer and the game
 			*/
@@ -124,44 +134,44 @@
 					hideTimerDiv();
 				}
 			}
-			
+
 			/*
 			every tick of the interval checker, update the timer, decide if we should
 			switch to next user
 			*/
 			function timerTick() {
 				var timeNow = new Date;
-								
+
 				var intMilisecondsTotal = Math.round((thunderTimeNext - timeNow));
 				$('#timer').text(getFriendlyTimeString(intMilisecondsTotal));
-				
+
 				if (timeNow > thunderTimeNext) {
 					nextUser();
 				}
 
 			};
-			
+
 			/*
 			switch to next user, update all state variables. checks to see if it should stop/ display start message or ending message
 			*/
 			function nextUser() {
 				var currentUserIdx = (currentThunderCount - 1)% users.length;
-					
+
 				thunderTimeNext = new Date(thunderTimeStart.getTime() + thunderTimes[currentThunderCount]);
 
 				if (currentThunderCount <= 0) {
 					//no one has gone yet, we're just starting
 					$('#current-user').text(textStart);
-					
+
 				} else if (currentThunderCount == thunderTimes.length -1) {
 					//song just ended, show final message
 					hideTimerDiv();
 					$('#current-user').text(textFinish);
-					
+
 				} else if (currentThunderCount > thunderTimes.length -1) {
 					//song is ended and we're past the final message, go to beginning
 					stopThunderstruck();
-					
+
 				} else {
 					//not a starting / ending condition, switch to next user
 					$('#current-user').text(users[currentUserIdx]);
@@ -169,10 +179,10 @@
 					var $usersDivList = $('#div-user-list').find('.user');
 					$($usersDivList[currentUserIdx]).addClass('active');
 				}
-				
+
 				currentThunderCount++;
 			}
-			
+
 			/*
 			clear everything and set everything up to be ready for the next game
 			*/
@@ -183,7 +193,7 @@
 				hideThunderstruckDiv();
 				showSetupContainer();
 			}
-			
+
 			/*
 			take all of the users entered in the input fields and builds them int the user list for the game
 			*/
@@ -205,16 +215,16 @@
 				//sorry for the mess here, only using notepad++... and the syntax highlighter doesn't love line breaks
 				var htmlInput = '<div class="user-input-container" ><input type="text" class="user-name" placeholder="Enter name..."/><button class="user-remove"> - </button><br /></div>'
 				$('#user-add-container').before(htmlInput);
-				
+
 				var $inputField = $('#user-add-container').prev().find('input');
 				$inputField.keyup(tryEnableStartButton);
-				
+
 				var $userRemoveBtn = $('#user-add-container').prev().find('.user-remove');
 				$userRemoveBtn.click(userRemove);
-				
+
 				tryEnableStartButton();
 			}
-			
+
 			function userRemove() {
 				$(this).parent().remove();
 			}
@@ -226,14 +236,14 @@
 			function audioLoad() {
 			  audioPlayer.load();
 			}
-			
+
 			/*
-			checks all user input fields and ensures none of them are 
+			checks all user input fields and ensures none of them are
 			empty string or whitespace before enabling the start button
 			*/
 			function tryEnableStartButton() {
 				var shouldEnable = true;
-				
+
 				var $usersDivList = $('#div-users-setup').find('.user-name');
 				$.each($usersDivList, function( i, element ) {
 					var userName = $(element).val();
@@ -242,23 +252,23 @@
 						return false;
 					}
 				});
-				
+
 				if(shouldEnable) {
 					enableStartButton();
 				} else {
 					disableStartButton();
 				}
 			}
-			
-			function enableStartButton() { 
+
+			function enableStartButton() {
 			  $('#start-button').prop("disabled",false);
 			}
-			
-			function disableStartButton() { 
+
+			function disableStartButton() {
 			  $('#start-button').prop("disabled",true);
 			}
-			
-			function showSetupContainer() { 
+
+			function showSetupContainer() {
 			  $('#div-setup-container').show();
 			}
 
