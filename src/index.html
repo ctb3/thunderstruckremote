@@ -142,12 +142,12 @@
 			function timerTick() {
 				var timeNow = new Date;
 
-				var intMilisecondsTotal = Math.round((thunderTimeNext - timeNow));
-				$('#timer').text(getFriendlyTimeString(intMilisecondsTotal));
-
 				if (timeNow > thunderTimeNext) {
 					nextUser();
 				}
+				
+				var intMilisecondsTotal = Math.round((thunderTimeNext - timeNow));
+				$('#timer').text(getFriendlyTimeString(intMilisecondsTotal));
 
 			};
 
